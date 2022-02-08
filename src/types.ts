@@ -1,4 +1,5 @@
 import { FHandleFontLoading } from "./func";
+import { useFonts } from "expo-font";
 
 export enum FFontFamily {
 	POPPINS = "Poppins",
@@ -13,8 +14,13 @@ export interface FFontProps {
 	isItalic?: boolean;
 }
 
+const [fontsLoaded] = useFonts({
+	"Nunito-SemiBold": require("./fonts/Nunito/Nunito-SemiBold.ttf"),
+	"Nunito-SemiBold-Italic": require("./fonts/Nunito/Nunito-SemiBoldItalic.ttf"),
+});
+
 export namespace FFontTypes {
 	export const FamilyName = (props: FFontProps) => {
-		return FHandleFontLoading(props) as string;
+		return FHandleFontLoading(props, fontsLoaded) as string | undefined;
 	};
 }

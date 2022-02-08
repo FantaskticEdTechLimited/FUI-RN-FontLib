@@ -1,4 +1,3 @@
-import { useFonts } from "expo-font";
 import { FFontFamily, FFontProps } from "./types";
 
 // ====================================================
@@ -16,34 +15,15 @@ import { FFontFamily, FFontProps } from "./types";
 
 // ====================================================
 
-export const FHandleFontLoading = (props: FFontProps) => {
-	const [fontsLoaded] = useFonts({
-		"Nunito-SemiBold": require("./fonts/Nunito/Nunito-SemiBold.ttf"),
-		"Nunito-SemiBold-Italic": require("./fonts/Nunito/Nunito-SemiBoldItalic.ttf"),
-	});
-
-	if (!fontsLoaded) return null;
-	else {
-		switch (props.fontFamily) {
-			case FFontFamily.NUNITO:
-				if (!props.isItalic) {
-					switch (props.fontWeight) {
-						case "600":
-							return "Nunito-SemiBold";
-						default:
-							return null;
-					}
-				} else {
-					switch (props.fontWeight) {
-						case "600":
-							return "Nunito-SemiBold-Italic";
-						default:
-							return null;
-					}
-				}
-
-			default:
-				return null;
-		}
-	}
+export const FHandleFontLoading = (props: FFontProps, isLoaded: boolean) => {
+	if (!isLoaded) return undefined;
+	return props.fontFamily === FFontFamily.NUNITO
+		? props.isItalic
+			? props.fontWeight === "600"
+				? "Nunito-SemiBold-Italic"
+				: undefined
+			: props.fontWeight === "600"
+			? "Nunito-SemiBold"
+			: undefined
+		: undefined;
 };
