@@ -1,3 +1,7 @@
-import { FFontTypes, FFontFamily } from "./types";
+import {
+	FFontTypes,
+	FFontFamilyNames, 
+	FFontWeight,
+} from "./types";
 
-export { FFontTypes, FFontFamily };
+export { FFontTypes, FFontFamilyNames, FFontWeight };
