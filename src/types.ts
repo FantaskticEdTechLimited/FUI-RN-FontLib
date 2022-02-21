@@ -9,10 +9,11 @@ export enum FFontFamilyNames {
 	MULISH = "Mulish",
 	MONTSERRAT = "Montserrat",
 	NUNITO = "Nunito",
+	QUICKSAND = "Quicksand"
 }
 
 export enum FFontWeight {
-	THIN = "100", // Nunito and Mulish do not have Fontweight Thin, 100
+	THIN = "100",  
 	EXTRA_LIGHT = "200",
 	LIGHT = "300",
 	REGULAR = "400", //default, no fontWeight
@@ -48,6 +49,15 @@ const FHandleFontLoading = (
 	defaultFonts?: FDefaultFontsTypes
 ) => {
 	const [fontsLoaded] = useFonts({
+		// ======================================================================================
+		// Quicksand
+		// ====================================================================================== 
+		"Quicksand-Light": require("./fonts/Quicksand/Quicksand-Light.ttf"), 
+		"Quicksand-Regular": require("./fonts/Quicksand/Quicksand-Regular.ttf"), 
+		"Quicksand-Medium": require("./fonts/Quicksand/Quicksand-Medium.ttf"), 
+		"Quicksand-SemiBold": require("./fonts/Quicksand/Quicksand-SemiBold.ttf"), 
+		"Quicksand-Bold": require("./fonts/Quicksand/Quicksand-Bold.ttf"),  
+
 		// ======================================================================================
 		// Poppins
 		// ======================================================================================
@@ -136,6 +146,21 @@ const FHandleFontLoading = (
 	const handleFonts = () => {
 		if (props?.fontFamily) {
 			switch (props?.fontFamily) {
+				case FFontFamilyNames.QUICKSAND:
+					switch (props?.fontWeight) { 
+						case FFontWeight.LIGHT:
+							return "Quicksand-Light";
+						case FFontWeight.REGULAR:
+							return "Quicksand-Regular";
+						case FFontWeight.MEDIUM:
+							return "Quicksand-Medium";
+						case FFontWeight.SEMI_BOLD:
+							return "Quicksand-SemiBold";
+						case FFontWeight.BOLD:
+							return "Quicksand-Bold"; 
+						default:
+							return "Quicksand-Regular";
+					}
 				case FFontFamilyNames.NUNITO:
 					if (props?.isItalic) {
 						switch (props?.fontWeight) {
