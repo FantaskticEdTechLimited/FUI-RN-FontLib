@@ -1,5 +1,11 @@
 import { useFonts } from "expo-font";
-import { LogBox, TextStyle } from "react-native";
+import {
+	LogBox,
+	TextStyle,
+	Platform,
+	PixelRatio,
+	Dimensions,
+} from "react-native";
 
 // to demolish the unnecessary warning statement below
 LogBox.ignoreLogs(["Overwriting fontFamily style attribute preprocessor"]);
@@ -9,11 +15,11 @@ export enum FFontFamilyNames {
 	MULISH = "Mulish",
 	MONTSERRAT = "Montserrat",
 	NUNITO = "Nunito",
-	QUICKSAND = "Quicksand"
+	QUICKSAND = "Quicksand",
 }
 
 export enum FFontWeight {
-	THIN = "100",  
+	THIN = "100",
 	EXTRA_LIGHT = "200",
 	LIGHT = "300",
 	REGULAR = "400", //default, no fontWeight
@@ -29,7 +35,6 @@ interface FFontProps {
 	fontFamily?: FFontFamilyNames;
 	isItalic?: boolean;
 	fontSize?: number;
-	lineHeight?: number;
 }
 
 enum FDefaultFontsTypes {
@@ -39,9 +44,9 @@ enum FDefaultFontsTypes {
 	SMALL_TITLE = "Small Title",
 	TITLE = "Title",
 	LARGE_TITLE = "Large Title",
-	SMALL_HEADING = "Small Heading",
-	HEADING = "Heading",
-	LARGE_HEADING = "Large Heading",
+	// SMALL_HEADING = "Small Heading",
+	// HEADING = "Heading",
+	// LARGE_HEADING = "Large Heading",
 }
 
 const FHandleFontLoading = (
@@ -51,12 +56,12 @@ const FHandleFontLoading = (
 	const [fontsLoaded] = useFonts({
 		// ======================================================================================
 		// Quicksand
-		// ====================================================================================== 
-		"Quicksand-Light": require("./fonts/Quicksand/Quicksand-Light.ttf"), 
-		"Quicksand-Regular": require("./fonts/Quicksand/Quicksand-Regular.ttf"), 
-		"Quicksand-Medium": require("./fonts/Quicksand/Quicksand-Medium.ttf"), 
-		"Quicksand-SemiBold": require("./fonts/Quicksand/Quicksand-SemiBold.ttf"), 
-		"Quicksand-Bold": require("./fonts/Quicksand/Quicksand-Bold.ttf"),  
+		// ======================================================================================
+		"Quicksand-Light": require("./fonts/Quicksand/Quicksand-Light.ttf"),
+		"Quicksand-Regular": require("./fonts/Quicksand/Quicksand-Regular.ttf"),
+		"Quicksand-Medium": require("./fonts/Quicksand/Quicksand-Medium.ttf"),
+		"Quicksand-SemiBold": require("./fonts/Quicksand/Quicksand-SemiBold.ttf"),
+		"Quicksand-Bold": require("./fonts/Quicksand/Quicksand-Bold.ttf"),
 
 		// ======================================================================================
 		// Poppins
@@ -147,7 +152,7 @@ const FHandleFontLoading = (
 		if (props?.fontFamily) {
 			switch (props?.fontFamily) {
 				case FFontFamilyNames.QUICKSAND:
-					switch (props?.fontWeight) { 
+					switch (props?.fontWeight) {
 						case FFontWeight.LIGHT:
 							return "Quicksand-Light";
 						case FFontWeight.REGULAR:
@@ -157,7 +162,7 @@ const FHandleFontLoading = (
 						case FFontWeight.SEMI_BOLD:
 							return "Quicksand-SemiBold";
 						case FFontWeight.BOLD:
-							return "Quicksand-Bold"; 
+							return "Quicksand-Bold";
 						default:
 							return "Quicksand-Regular";
 					}
@@ -368,77 +373,136 @@ const FHandleFontLoading = (
 	return handleFonts();
 };
 
+const FRWDFontSize = (size: number) => {
+	const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+	const baseWidth = 360;
+
+	const RWDScaleCalculator = (value: number) => {
+		const result = SCREEN_WIDTH * (value / baseWidth);
+		return result;
+	};
+
+	const newSize = RWDScaleCalculator(size);
+
+	if (Platform.OS === "ios") {
+		return Math.round(PixelRatio.roundToNearestPixel(newSize));
+	} else {
+		return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+	}
+};
+
+const lineHeightMultiplier = 1.5;
+
+const defaultFontSize = {
+	Small_Text: FRWDFontSize(10),
+	Text: FRWDFontSize(12),
+	Large_Text: FRWDFontSize(14),
+	Small_Title: FRWDFontSize(16),
+	Title: FRWDFontSize(24),
+	Large_Title: FRWDFontSize(32),
+};
+
+const defaultLineHeight = {
+	Small_Text: defaultFontSize.Small_Text * lineHeightMultiplier,
+	Text: defaultFontSize.Text * lineHeightMultiplier,
+	Large_Text: defaultFontSize.Large_Text * lineHeightMultiplier,
+	Small_Title: defaultFontSize.Small_Title * lineHeightMultiplier,
+	Title: defaultFontSize.Title * lineHeightMultiplier,
+	Large_Title: defaultFontSize.Large_Title * lineHeightMultiplier,
+};
+
 export namespace FFontTypes {
 	export const RenderFont = (props?: FFontProps) => {
+		const fontSize = props?.fontSize && FRWDFontSize(props.fontSize);
+		const lineHeight = fontSize && fontSize * lineHeightMultiplier;
 		return <TextStyle>{
 			fontFamily: FHandleFontLoading(props),
-			fontSize: props?.fontSize,
-			lineHeight: props?.lineHeight,
+			fontSize: fontSize,
+			lineHeight: lineHeight,
 		};
 	};
 	export namespace FDefaultFonts {
 		export const Small_Text = (props?: FFontProps) => {
+			const fontSize = props?.fontSize && FRWDFontSize(props.fontSize);
+			const lineHeight = fontSize && fontSize * lineHeightMultiplier;
 			return <TextStyle>{
 				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.SMALL_TEXT),
-				fontSize: props?.fontSize ?? 10,
-				lineHeight: props?.lineHeight ?? 16,
+				fontSize: fontSize ?? defaultFontSize.Small_Text,
+				lineHeight: lineHeight ?? defaultLineHeight.Small_Text,
 			};
 		};
 		export const Text = (props?: FFontProps) => {
+			const fontSize = props?.fontSize && FRWDFontSize(props.fontSize);
+			const lineHeight = fontSize && fontSize * lineHeightMultiplier;
 			return <TextStyle>{
 				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.TEXT),
-				fontSize: props?.fontSize ?? 12,
-				lineHeight: props?.lineHeight ?? 18,
+				fontSize: fontSize ?? defaultFontSize.Text,
+				lineHeight: lineHeight ?? defaultLineHeight.Text,
 			};
 		};
 		export const Large_Text = (props?: FFontProps) => {
+			const fontSize = props?.fontSize && FRWDFontSize(props.fontSize);
+			const lineHeight = fontSize && fontSize * lineHeightMultiplier;
 			return <TextStyle>{
 				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.LARGE_TEXT),
-				fontSize: props?.fontSize ?? 14,
-				lineHeight: props?.lineHeight ?? 22,
+				fontSize: fontSize ?? defaultFontSize.Large_Text,
+				lineHeight: lineHeight ?? defaultLineHeight.Large_Text,
 			};
 		};
 		export const Small_Title = (props?: FFontProps) => {
+			const fontSize = props?.fontSize && FRWDFontSize(props.fontSize);
+			const lineHeight = fontSize && fontSize * lineHeightMultiplier;
 			return <TextStyle>{
 				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.SMALL_TITLE),
-				fontSize: props?.fontSize ?? 16,
-				lineHeight: props?.lineHeight ?? 24,
+				fontSize: fontSize ?? defaultFontSize.Small_Title,
+				lineHeight: lineHeight ?? defaultLineHeight.Small_Title,
 			};
 		};
 		export const Title = (props?: FFontProps) => {
+			const fontSize = props?.fontSize && FRWDFontSize(props.fontSize);
+			const lineHeight = fontSize && fontSize * lineHeightMultiplier;
 			return <TextStyle>{
 				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.TITLE),
-				fontSize: props?.fontSize ?? 24,
-				lineHeight: props?.lineHeight ?? 32,
+				fontSize: fontSize ?? defaultFontSize.Title,
+				lineHeight: lineHeight ?? defaultLineHeight.Title,
 			};
 		};
 		export const Large_Title = (props?: FFontProps) => {
+			const fontSize = props?.fontSize && FRWDFontSize(props.fontSize);
+			const lineHeight = fontSize && fontSize * lineHeightMultiplier;
 			return <TextStyle>{
 				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.LARGE_TITLE),
-				fontSize: props?.fontSize ?? 32,
-				lineHeight: props?.lineHeight ?? 40,
+				fontSize: fontSize ?? defaultFontSize.Large_Title,
+				lineHeight: lineHeight ?? defaultLineHeight.Large_Title,
 			};
 		};
-		export const Small_Heading = (props?: FFontProps) => {
-			return <TextStyle>{
-				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.SMALL_HEADING),
-				fontSize: props?.fontSize ?? 48,
-				lineHeight: props?.lineHeight ?? 64,
-			};
-		};
-		export const Heading = (props?: FFontProps) => {
-			return <TextStyle>{
-				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.HEADING),
-				fontSize: props?.fontSize ?? 64,
-				lineHeight: props?.lineHeight ?? 80,
-			};
-		};
-		export const Large_Heading = (props?: FFontProps) => {
-			return <TextStyle>{
-				fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.LARGE_HEADING),
-				fontSize: props?.fontSize ?? 80,
-				lineHeight: props?.lineHeight ?? 96,
-			};
-		};
+		// export const Small_Heading = (props?: FFontProps) => {
+		// 	const fontSize = FRWDFontSize(props?.fontSize!);
+		// 	const lineHeight = fontSize * lineHeightMultiplier;
+		// 	return <TextStyle>{
+		// 		fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.SMALL_HEADING),
+		// 		fontSize: fontSize ?? 48,
+		// 		lineHeight: lineHeight ?? 64,
+		// 	};
+		// };
+		// export const Heading = (props?: FFontProps) => {
+		// 	const fontSize = FRWDFontSize(props?.fontSize!);
+		// 	const lineHeight = fontSize * lineHeightMultiplier;
+		// 	return <TextStyle>{
+		// 		fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.HEADING),
+		// 		fontSize: fontSize ?? 64,
+		// 		lineHeight: lineHeight ?? 80,
+		// 	};
+		// };
+		// export const Large_Heading = (props?: FFontProps) => {
+		// 	const fontSize = FRWDFontSize(props?.fontSize!);
+		// 	const lineHeight = fontSize * lineHeightMultiplier;
+		// 	return <TextStyle>{
+		// 		fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.LARGE_HEADING),
+		// 		fontSize: fontSize ?? 80,
+		// 		lineHeight: lineHeight ?? 96,
+		// 	};
+		// };
 	}
 }
