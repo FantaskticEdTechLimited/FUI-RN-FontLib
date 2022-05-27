@@ -43,10 +43,7 @@ enum FDefaultFontsTypes {
 	LARGE_TEXT = "Large Text",
 	SMALL_TITLE = "Small Title",
 	TITLE = "Title",
-	LARGE_TITLE = "Large Title",
-	// SMALL_HEADING = "Small Heading",
-	// HEADING = "Heading",
-	// LARGE_HEADING = "Large Heading",
+	LARGE_TITLE = "Large Title", 
 }
 
 const FHandleFontLoading = (
@@ -476,33 +473,6 @@ export namespace FFontTypes {
 				fontSize: fontSize ?? defaultFontSize.Large_Title,
 				lineHeight: lineHeight ?? defaultLineHeight.Large_Title,
 			};
-		};
-		// export const Small_Heading = (props?: FFontProps) => {
-		// 	const fontSize = FRWDFontSize(props?.fontSize!);
-		// 	const lineHeight = fontSize * lineHeightMultiplier;
-		// 	return <TextStyle>{
-		// 		fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.SMALL_HEADING),
-		// 		fontSize: fontSize ?? 48,
-		// 		lineHeight: lineHeight ?? 64,
-		// 	};
-		// };
-		// export const Heading = (props?: FFontProps) => {
-		// 	const fontSize = FRWDFontSize(props?.fontSize!);
-		// 	const lineHeight = fontSize * lineHeightMultiplier;
-		// 	return <TextStyle>{
-		// 		fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.HEADING),
-		// 		fontSize: fontSize ?? 64,
-		// 		lineHeight: lineHeight ?? 80,
-		// 	};
-		// };
-		// export const Large_Heading = (props?: FFontProps) => {
-		// 	const fontSize = FRWDFontSize(props?.fontSize!);
-		// 	const lineHeight = fontSize * lineHeightMultiplier;
-		// 	return <TextStyle>{
-		// 		fontFamily: FHandleFontLoading(props, FDefaultFontsTypes.LARGE_HEADING),
-		// 		fontSize: fontSize ?? 80,
-		// 		lineHeight: lineHeight ?? 96,
-		// 	};
-		// };
+		}; 
 	}
 }
