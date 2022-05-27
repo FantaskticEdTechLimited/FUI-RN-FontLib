@@ -1,6 +1,6 @@
 {
   "name": "@fantaskticedtechlimited/fui-rn-fontlib",
-  "version": "3.7.4",
+  "version": "3.8.0",
   "description": "Fantasktic UI React Native Font Library",
   "main": "lib\\commonjs\\index.js",
   "react-native": "src\\index.ts",
