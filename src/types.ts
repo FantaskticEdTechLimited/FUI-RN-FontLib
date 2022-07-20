@@ -1,11 +1,5 @@
 import { useFonts } from "expo-font";
-import {
-	LogBox,
-	TextStyle,
-	Platform,
-	PixelRatio,
-	Dimensions,
-} from "react-native";
+import { LogBox, TextStyle, PixelRatio, Dimensions } from "react-native";
 
 // to demolish the unnecessary warning statement below
 LogBox.ignoreLogs(["Overwriting fontFamily style attribute preprocessor"]);
@@ -43,7 +37,7 @@ enum FDefaultFontsTypes {
 	LARGE_TEXT = "Large Text",
 	SMALL_TITLE = "Small Title",
 	TITLE = "Title",
-	LARGE_TITLE = "Large Title", 
+	LARGE_TITLE = "Large Title",
 }
 
 const FHandleFontLoading = (
@@ -382,11 +376,7 @@ const FRWDFontSize = (size: number) => {
 
 	const newSize = RWDScaleCalculator(size);
 
-	if (Platform.OS === "ios") {
-		return Math.round(PixelRatio.roundToNearestPixel(newSize));
-	} else {
-		return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
-	}
+	return Math.round(PixelRatio.roundToNearestPixel(newSize));
 };
 
 const lineHeightMultiplier = 1.5;
@@ -473,6 +463,6 @@ export namespace FFontTypes {
 				fontSize: fontSize ?? defaultFontSize.Large_Title,
 				lineHeight: lineHeight ?? defaultLineHeight.Large_Title,
 			};
-		}; 
+		};
 	}
 }
